@@ -39,10 +39,10 @@ public abstract class HttpObservableAsyncHandler : IHttpAsyncHandler {
     }
 
     void IHttpAsyncHandler.EndProcessRequest (IAsyncResult result) {
-        if (null == result) {
+        var ar = result as IAsyncResult<Unit>;
+        if (null == ar) {
             throw new ArgumentNullException ("result");
         }
-        var ar = result as IAsyncResult<Unit>;
         ar.AsyncWaitHandle.WaitOne ();
         ar.ThrowIfExceptionEncountered ();
     }
