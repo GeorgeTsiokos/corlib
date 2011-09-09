@@ -1,14 +1,24 @@
-﻿using System;
-using System.Threading;
-using CorLib.Threading;
+﻿using System.Threading;
+using System;
 
-namespace CorLib.Internal.Threading {
+namespace CorLib.Threading {
 
-    internal struct AtomicUInt64 : IAtomic<ulong> {
+    /// <summary>
+    /// A UInt64 that can be accessed from multiple threads concurrently
+    /// </summary>
+    /// <remarks>
+    /// By default, this type's value will start at (0). In addition, this type 
+    /// will not throw an overflow exception. The value will reset to 0 when 
+    /// incremented past (18,446,744,073,709,551,615).
+    /// <see cref="IAtomic{T}.Info"/>
+    /// </remarks>
+    /// <returns>a new instance</returns>
+    [CLSCompliant (false)]
+    public struct AtomicUInt64 {
         static readonly AtomicInfo<ulong> __info = new AtomicInfo<ulong> (0, 18446744073709551615, 9223372036854775808);
         long _value;
 
-        public IAtomicInfo<ulong> Info {
+        public AtomicInfo<ulong> Info {
             get { return __info; }
         }
 

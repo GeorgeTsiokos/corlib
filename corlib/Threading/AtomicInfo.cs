@@ -1,8 +1,8 @@
 ﻿using CorLib.Threading;
 
-namespace CorLib.Internal.Threading {
+namespace CorLib.Threading {
 
-    internal sealed class AtomicInfo<T> : IAtomicInfo<T> {
+    public sealed class AtomicInfo<T> {
 
         public AtomicInfo (T minValue, T maxValue, T defaultValue) {
             MinValue = minValue;
@@ -10,16 +10,19 @@ namespace CorLib.Internal.Threading {
             DefaultValue = defaultValue;
         }
 
+        /// <summary>The minimmum value supported by this type</summary>
         public T MinValue {
             get;
             private set;
         }
 
+        /// <summary>The maximum value supported by this type</summary>
         public T MaxValue {
             get;
             private set;
         }
 
+        /// <summary>The default value for this type</summary>
         public T DefaultValue {
             get;
             private set;

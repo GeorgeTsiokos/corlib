@@ -6,11 +6,12 @@ namespace CorLib.Threading {
     /// A value that can be accessed by multiple threads concurrently
     /// </summary>
     /// <typeparam name="T">the type of the value</typeparam>
+    [Obsolete]
     public interface IAtomic<T> {
         /// <summary>
         /// Detailed information about the atomic type
         /// </summary>
-        IAtomicInfo<T> Info { get; }
+        AtomicInfo<T> Info { get; }
         /// <summary>
         /// Gets or sets the value
         /// </summary>

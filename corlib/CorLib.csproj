@@ -91,14 +91,12 @@
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableExtensions.cs" />
     <Compile Include="ExperimentalState.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="HttpTaskAsyncHandler.cs" />
     <Compile Include="Internal\AsyncResult`1.cs" />
     <Compile Include="IDisposable`1.cs" />
     <Compile Include="Internal\Collections\Generic\ImmutableDisposable`1.cs" />
     <Compile Include="IO\ObservableExtensions.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="NullableTimeSpanExtensions.cs" />
-    <Compile Include="Threading\Atomic.cs" />
     <Compile Include="Collections\Concurrent\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Collections\Concurrent\ObservableExtensions.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableOptions.cs" />
@@ -111,14 +109,13 @@
     <Compile Include="Reactive\Concurrency\SchedulerExtensions.cs" />
     <Compile Include="Reactive\ObservableExtensions.cs" />
     <Compile Include="Threading\CancellationTokenExtensions.cs" />
-    <Compile Include="Internal\Threading\AtomicInfo.cs" />
-    <Compile Include="Internal\Threading\AtomicUInt64.cs" />
+    <Compile Include="Threading\AtomicInfo.cs" />
+    <Compile Include="Threading\AtomicUInt64.cs" />
     <Compile Include="Diagnostics\ExceptionLogger.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Diagnostics\TraceSourceExtensions.cs" />
     <Compile Include="Diagnostics\TraceSourceFactory.cs" />
     <Compile Include="DisposableExtensions.cs" />
-    <Compile Include="Threading\IAtomicInfo`1.cs" />
     <Compile Include="Threading\IAtomic`1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactive\Concurrency\EventLoopSchedulerSlim.cs" />
@@ -131,7 +128,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Internal\Threading\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
