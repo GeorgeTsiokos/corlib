@@ -16,35 +16,35 @@ To get started:
 
 # Samples
 ## Rx Simplified APM integration
-```csharp
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Web;
+using CorLib;
+
 public abstract class HttpObservableAsyncHandler : IHttpAsyncHandler {
 
     public virtual bool IsReusable {
         get { return false; }
     }
 
-    public virtual void ProcessRequest (HttpContext context) {
+    public abstract IObservable<Unit> ProcessRequestAsync (HttpContext context);
+
+    void IHttpHandler.ProcessRequest (HttpContext context) {
         ProcessRequestAsync (context).ForEach (_ => { });
     }
 
-    public abstract IObservable<Unit> ProcessRequestAsync (HttpContext context);
-
     IAsyncResult IHttpAsyncHandler.BeginProcessRequest (HttpContext context, AsyncCallback cb, object extraData) {
-        try {
-            return ProcessRequestAsync (context).AsAsyncResult (cb, extraData);
-        }
-        catch (Exception exception) {
-            return Observable.Throw<Unit> (exception).AsAsyncResult (cb, state);
-        }
+        return Observable.Defer<Unit> (() => 
+            ProcessRequestAsync (context)).AsAsyncResult (cb, extraData);
     }
 
     void IHttpAsyncHandler.EndProcessRequest (IAsyncResult result) {
         var ar = result as IAsyncResult<Unit>;
-        if (null == ar) {
+        if (null == ar)
             throw new ArgumentNullException ("result");
-        }
+
         ar.AsyncWaitHandle.WaitOne ();
         ar.ThrowIfExceptionEncountered ();
     }
 }
-```
