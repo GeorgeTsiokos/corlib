@@ -1,4 +1,4 @@
-![corlib](corlib.png)
+![corlib](corlib/raw/master/inc/corlib.png)
 # LICENSE
 Microsoft Reciprocal License (Ms-RL) <http://www.opensource.org/licenses/MS-RL>
 
