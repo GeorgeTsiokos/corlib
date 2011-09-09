@@ -58,22 +58,21 @@ namespace CorLib.Reactive {
 
 #if EXPERIMENTAL
         [ExperimentalAttribute (State = ExperimentalState.RequiresFeedback)]
-        public static Func<TKey, ISubject<IObservable<TValue>>> ToKeyedSubject<TKey, TValue> (this Func<TKey, IObservable<TValue>> factory) {
+        public static Func<TKey, ISubject<IObservable<TValue>>> ToKeyedSubject<TKey, TValue> (this Func<TKey, ISubject<IObservable<TValue>>> factory) {
             return ToKeyedSubject (factory, EqualityComparer<TKey>.Default);
         }
 
         [ExperimentalAttribute (State = ExperimentalState.RequiresFeedback)]
-        public static Func<TKey, ISubject<IObservable<TValue>>> ToKeyedSubject<TKey, TValue> (this Func<TKey, IObservable<TValue>> factory, IEqualityComparer<TKey> comparer) {
+        public static Func<TKey, ISubject<IObservable<TValue>>> ToKeyedSubject<TKey, TValue> (this Func<TKey, ISubject<IObservable<TValue>>> factory, IEqualityComparer<TKey> comparer) {
             var dictionary = new ConcurrentDictionary<TKey, ISubject<IObservable<TValue>>> (comparer);
             Func<TKey, ISubject<IObservable<TValue>>> factory_ = key => {
-                IObservable<TValue> result;
+                ISubject<IObservable<TValue>> subject;
                 try {
-                    result = factory (key);
+                    subject = factory (key);
                 }
                 catch (Exception exception) {
-                    result = Observable.Throw<TValue> (exception);
+                    subject = new BehaviorSubject<IObservable<TValue>>(Observable.Throw<TValue> (exception));
                 }
-                var subject = new BehaviorSubject<IObservable<TValue>> (result);
                 subject.Finally (() => dictionary.TryRemove (key)).Subscribe ();
                 return subject;
             };

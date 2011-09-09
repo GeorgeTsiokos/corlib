@@ -66,6 +66,19 @@ namespace CorLib {
             return result;
         }
 
+        /// <summary>Creates a async result with the specified callback and state</summary>
+        /// <param name="callback">callback as required by APM</param>
+        /// <param name="asyncState">state as required by APM</param>
+        /// <returns>an async result for use with APM</returns>
+        /// <param name="value">the value associated with this completed async result</param>
+        /// <returns>A completed async result for use with the APM</returns>
+        public static IAsyncResult<T> CreateCompleted<T> (AsyncCallback callback, object asyncState, Exception exception) {
+            var result = new AsyncResult<T> (callback, asyncState, true, CompletedManualResetEvent);
+            result.OnError (exception);
+            result.InvokeCallback ();
+            return result;
+        }
+
         /// <summary>Creates a completed async result with the specified callback and asyncState</summary>
         /// <param name="callback">callback to invoke immediately</param>
         /// <param name="asyncState">state as required by APM</param>

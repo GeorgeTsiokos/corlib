@@ -59,6 +59,7 @@
     <Compile Include="NullableTimeSpanExtensionsTest.cs" />
     <Compile Include="ObservableExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Threading\AtomicUInt64Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
