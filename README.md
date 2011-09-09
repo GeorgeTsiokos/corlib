@@ -16,6 +16,7 @@ To get started:
 
 # Samples
 ## Rx Simplified APM integration
+```csharp
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -48,3 +49,4 @@ public abstract class HttpObservableAsyncHandler : IHttpAsyncHandler {
         ar.ThrowIfExceptionEncountered ();
     }
 }
+```
