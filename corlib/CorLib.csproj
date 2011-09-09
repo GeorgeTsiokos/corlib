@@ -88,6 +88,8 @@
     </Compile>
     <Compile Include="AsyncResult.cs" />
     <Compile Include="CharArrayExtensions.cs" />
+    <Compile Include="Collections\Concurrent\ConcurrentDictionaryExtensions.cs" />
+    <Compile Include="Collections\Concurrent\DisposableValueMode.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableExtensions.cs" />
     <Compile Include="ExperimentalState.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -97,7 +99,6 @@
     <Compile Include="IO\ObservableExtensions.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="NullableTimeSpanExtensions.cs" />
-    <Compile Include="Collections\Concurrent\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Collections\Concurrent\ObservableExtensions.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableOptions.cs" />
     <Compile Include="Diagnostics\ExceptionHandler.cs" />
@@ -127,9 +128,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal\Threading\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

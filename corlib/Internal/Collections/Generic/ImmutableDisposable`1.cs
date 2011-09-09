@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace CorLib.Internal.Collections.Generic {
 
     internal sealed class ImmutableDisposable<T> : IDisposable<T> {
-        readonly IProducerConsumerCollection<IDisposable<T>> _collection;
-        readonly T _value;
+        IProducerConsumerCollection<IDisposable<T>> _collection;
+        T _value;
 
         public ImmutableDisposable (IProducerConsumerCollection<IDisposable<T>> collection, T value) {
             if (collection == null)
@@ -19,8 +20,9 @@ namespace CorLib.Internal.Collections.Generic {
         }
 
         public void Dispose () {
-            if (!_collection.TryAdd (this))
-                (_value as IDisposable).TryDispose ();
+            var collection = Interlocked.Exchange (ref _collection, null);
+            if (null != collection)
+                collection.TryAdd (this);
         }
     }
 }

@@ -48,12 +48,26 @@ namespace CorLib.Reactive {
             return sequence.Finally2 (disposable.Dispose);
         }
 
+        /// <summary>
+        /// Invokes Dispose on each disposable value
+        /// </summary>
+        /// <typeparam name="T">value type</typeparam>
+        /// <param name="sequence">source sequence of disposable values</param>
+        /// <returns>the dispose result</returns>
+        public static IObservable<bool> Using<T> (this IObservable<IDisposable<T>> sequence) {
+            if (sequence == null)
+                throw new ArgumentNullException ("sequence", "sequence is null.");
+            return sequence.Select (value => value.TryDispose ());
+        }
+
+
         public static IObservable<T> ContinueWith<T> (this IObservable<T> sequence, Func<IObservable<T>> nextSequence) {
             return sequence.Concat<T> (Observable.Defer<T> (nextSequence));
         }
 
         public static IObservable<T> IgnoreElementsContinueWith<X, T> (this IObservable<X> sequence, Func<IObservable<T>> nextSequence) {
-            return sequence.IgnoreElements ().Select (_ => default (T)).ContinueWith<T> (nextSequence);
+            return sequence.IgnoreElements ().Select (_ => 
+                default (T)).ContinueWith<T> (nextSequence);
         }
 
 #if EXPERIMENTAL

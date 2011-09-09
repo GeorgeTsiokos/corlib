@@ -24,14 +24,13 @@ namespace CorLib.IO {
                     observer.OnCompleted));
         }
 
-        public static IObservable<IObservable<Unit>> Write (this IObservable<Tuple<IDisposable<byte[]>, int, int>> sequence, Stream stream) {
+        public static IObservable<Tuple<IDisposable<byte[]>, int, int>> Write (this IObservable<Tuple<IDisposable<byte[]>, int, int>> sequence, Stream stream) {
             var write = Observable.FromAsyncPattern<byte[], int, int> (
                 stream.BeginWrite,
                 stream.EndWrite);
-            return Observable.Create<IObservable<Unit>> (observer =>
+            return Observable.Create<Tuple<IDisposable<byte[]>, int, int>> (observer =>
                 sequence.Subscribe (value =>
-                    observer.OnNext (
-                        write (value.Item1.Value, value.Item2, value.Item3).Using (value.Item1)),
+                    write (value.Item1.Value, value.Item2, value.Item3).Select (_ => value).Subscribe (observer.OnNext),
                     observer.OnError,
                     observer.OnCompleted));
         }

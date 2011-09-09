@@ -19,7 +19,7 @@ namespace CorLib.Threading {
         /// <summary>
         /// Detailed information about the atomic type
         /// </summary>
-        public AtomicInfo<ulong> Info {
+        public static AtomicInfo<ulong> Info {
             get { return __info; }
         }
 

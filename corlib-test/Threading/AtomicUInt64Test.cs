@@ -14,7 +14,7 @@ namespace CorLib.Threading {
         [TestMethod]
         public void AtomicUInt64StartsAtDefaultValue () {
             AtomicUInt64 target = new AtomicUInt64 ();
-            Assert.AreEqual (target.Info.DefaultValue, target.Value);
+            Assert.AreEqual (AtomicUInt64.Info.DefaultValue, target.Value);
         }
 
         [TestMethod]
