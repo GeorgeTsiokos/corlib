@@ -56,6 +56,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\inc\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="NullableTimeSpanExtensionsTest.cs" />
     <Compile Include="ObservableExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
