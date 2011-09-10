@@ -89,7 +89,6 @@
     <Compile Include="AsyncResult.cs" />
     <Compile Include="CharArrayExtensions.cs" />
     <Compile Include="Collections\Concurrent\ConcurrentDictionaryExtensions.cs" />
-    <Compile Include="Collections\Concurrent\DisposableValueMode.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableExtensions.cs" />
     <Compile Include="ExperimentalState.cs" />
     <Compile Include="GlobalSuppressions.cs" />
