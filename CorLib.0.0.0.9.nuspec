@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CorLib</id>
+    <version>0.0.0.9</version>
+    <title />
+    <authors>George Tsiokos</authors>
+    <owners />
+    <licenseUrl>http://www.opensource.org/licenses/MS-RL</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>CorLib is a class-library containing many useful types &amp; extension methods missing from the .NET Framework, including AsyncResult &amp; EventLoopSchedulerSlim!</description>
+    <summary>Microsoft Reciprocal License (Ms-RL)</summary>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright © George Tsiokos 2011</copyright>
+  </metadata>
+  <files />
+</package>

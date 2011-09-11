@@ -7,10 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorLib-Test", "corlib-test\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29C96BF9-27D6-4E9C-A4AE-C1D4CD3A914B}"
 	ProjectSection(SolutionItems) = preProject
+		CorLib.0.0.0.9.nuspec = CorLib.0.0.0.9.nuspec
 		CorLib.vsmdi = CorLib.vsmdi
 		Local.testsettings = Local.testsettings
+		README.md = README.md
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorLib.Web", "CorLib.Web\CorLib.Web.csproj", "{53237C65-8D58-4018-AB47-1E3063753B8A}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -19,6 +23,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Experimental|Any CPU = Experimental|Any CPU
+		Publish|Any CPU = Publish|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -26,14 +31,26 @@ Global
 		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Experimental|Any CPU.ActiveCfg = Experimental|Any CPU
 		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Experimental|Any CPU.Build.0 = Experimental|Any CPU
+		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
+		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Publish|Any CPU.Build.0 = Publish|Any CPU
 		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C428CC8B-07FD-450A-8341-48A41F9798CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Experimental|Any CPU.ActiveCfg = Release|Any CPU
 		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Experimental|Any CPU.Build.0 = Release|Any CPU
+		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Publish|Any CPU.Build.0 = Release|Any CPU
 		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94FD400B-6D94-4313-A70F-6B1376AA1129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Experimental|Any CPU.ActiveCfg = Release|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Experimental|Any CPU.Build.0 = Release|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53237C65-8D58-4018-AB47-1E3063753B8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

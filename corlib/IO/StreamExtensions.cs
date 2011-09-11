@@ -9,8 +9,11 @@ namespace CorLib.IO {
 
     public static class StreamExtensions {
 
-        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadBytes (this Stream stream, int bufferSize, bool waitForObserver) {
-            var bag = new ConcurrentBag<IDisposable<byte[]>> ();
+        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadAsync (this Stream stream, int bufferSize, bool waitForObserver) {
+            return ReadAsync (stream, bufferSize, waitForObserver, new ConcurrentBag<IDisposable<byte[]>> ());
+        }
+
+        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadAsync (this Stream stream, int bufferSize, bool waitForObserver, IProducerConsumerCollection<IDisposable<byte[]>> cache) {
             var read = Observable.FromAsyncPattern<byte[], int, int, int> (stream.BeginRead, stream.EndRead);
 
             return Observable.Create<Tuple<IDisposable<byte[]>, int>> (observer => {
@@ -40,10 +43,14 @@ namespace CorLib.IO {
                     };
 
                 loop = () => {
-                    var buffer = bag.TakeOrCreate (() =>
+                    var buffer = cache.TakeOrCreate (() =>
                         new byte[bufferSize]);
-                    read (buffer.Value, 0, bufferSize).Subscribe (bytesRead =>
-                        engine (buffer, bytesRead), onError);
+                    read (buffer.Value, 0, bufferSize).Subscribe (bytesRead => {
+                        if (0 == bytesRead)
+                            observer.OnCompleted ();
+                        else
+                            engine (buffer, bytesRead);
+                    }, onError);
                 };
 
                 loop ();

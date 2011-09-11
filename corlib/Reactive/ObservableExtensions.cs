@@ -7,11 +7,16 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using CorLib.Collections.Concurrent;
-using CorLib.Diagnostics;
 
 namespace CorLib.Reactive {
 
     public static class ObservableExtensions {
+
+        public static ISubject<T> AsSubject<T> (this IObservable<T> sequence) {
+            var subject = new Subject<T> ();
+            sequence.Subscribe (subject);
+            return subject;
+        }
 
         /// <summary>Invokes a specified action after source observable sequence terminates normally or by an exception</summary>
         /// <param name="sequence">Source sequence</param>
@@ -70,30 +75,27 @@ namespace CorLib.Reactive {
                 default (T)).ContinueWith<T> (nextSequence);
         }
 
-#if EXPERIMENTAL
-        [ExperimentalAttribute (State = ExperimentalState.RequiresFeedback)]
-        public static Func<TKey, ISubject<IObservable<TValue>>> ToKeyedSubject<TKey, TValue> (this Func<TKey, ISubject<IObservable<TValue>>> factory) {
-            return ToKeyedSubject (factory, EqualityComparer<TKey>.Default);
+        public static Func<TKey, ISubject<TValue>> CacheSubject<TKey, TValue> (this Func<TKey, ISubject<TValue>> factory) {
+            return CacheSubject (factory, EqualityComparer<TKey>.Default);
         }
 
-        [ExperimentalAttribute (State = ExperimentalState.RequiresFeedback)]
-        public static Func<TKey, ISubject<IObservable<TValue>>> ToKeyedSubject<TKey, TValue> (this Func<TKey, ISubject<IObservable<TValue>>> factory, IEqualityComparer<TKey> comparer) {
-            var dictionary = new ConcurrentDictionary<TKey, ISubject<IObservable<TValue>>> (comparer);
-            Func<TKey, ISubject<IObservable<TValue>>> factory_ = key => {
-                ISubject<IObservable<TValue>> subject;
+        public static Func<TKey, ISubject<TValue>> CacheSubject<TKey, TValue> (this Func<TKey, ISubject<TValue>> factory, IEqualityComparer<TKey> comparer) {
+            var dictionary = new ConcurrentDictionary<TKey, ISubject<TValue>> (comparer);
+            Func<TKey, ISubject<TValue>> factory_ = key => {
+                ISubject<TValue> subject;
                 try {
                     subject = factory (key);
+                    subject.Finally (() => dictionary.TryRemove (key)).Subscribe ();
                 }
                 catch (Exception exception) {
-                    subject = new BehaviorSubject<IObservable<TValue>>(Observable.Throw<TValue> (exception));
+                    subject = Observable.Throw<TValue> (exception).AsSubject ();
                 }
-                subject.Finally (() => dictionary.TryRemove (key)).Subscribe ();
                 return subject;
             };
-            return key => dictionary.GetOrAdd (key, key_ =>
-                factory_ (key_));
+            return key => dictionary.GetOrAdd (key, factory_);
         }
 
+#if EXPERIMENTAL
         /// <summary>
         /// Detects conncurrent OnNext calls from <paramref name="sequence"/>
         /// </summary>
