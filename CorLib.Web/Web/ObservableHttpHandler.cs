@@ -19,14 +19,8 @@ namespace CorLib.Web {
 
         /// <remarks>deferrs exceptions to End APM method</remarks>
         IAsyncResult IHttpAsyncHandler.BeginProcessRequest (HttpContext context, AsyncCallback cb, object extraData) {
-            IObservable<Unit> result;
-            try {
-                result = ProcessRequestAsync (context);
-            }
-            catch (Exception exception) {
-                result = Observable.Throw<Unit> (exception);
-            }
-            return result.AsAsyncResult<Unit> (cb, extraData);
+            return Observable.Defer<Unit> (() =>
+                ProcessRequestAsync (context)).AsAsyncResult<Unit> (cb, extraData);
         }
 
         void IHttpAsyncHandler.EndProcessRequest (IAsyncResult result) {

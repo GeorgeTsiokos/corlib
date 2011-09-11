@@ -16,37 +16,50 @@ To get started:
 
 # Samples
 ## Rx Simplified APM integration
+Calling Observable.Defer delays exceptions thrown from the abstract method to the Rx sequence which
+is subsequently picked up by the AsAsyncResult extension method who's ThrowIfExceptionEncountered method
+is called from the End APM method
 ```csharp
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Web;
-using CorLib;
 
-public abstract class HttpObservableAsyncHandler : IHttpAsyncHandler {
+namespace CorLib.Web {
 
-    public virtual bool IsReusable {
-        get { return false; }
-    }
+    /// <summary>
+    /// Defines the base implementation of Rx HTTP asynchronous handler objects
+    /// </summary>
+    public abstract class ObservableHttpHandler : IHttpAsyncHandler {
 
-    public abstract IObservable<Unit> ProcessRequestAsync (HttpContext context);
+        /// <summary>
+        /// Async handler implementation
+        /// </summary>
+        /// <param name="context">current HTTP context</param>
+        /// <returns>an observable sequence that signals completion or an error</returns>
+        protected abstract IObservable<Unit> ProcessRequestAsync (HttpContext context);
 
-    void IHttpHandler.ProcessRequest (HttpContext context) {
-        ProcessRequestAsync (context).ForEach (_ => { });
-    }
+        /// <remarks>deferrs exceptions to End APM method</remarks>
+        IAsyncResult IHttpAsyncHandler.BeginProcessRequest (HttpContext context, AsyncCallback cb, object extraData) {
+            return Observable.Defer<Unit> (() =>
+                ProcessRequestAsync (context)).AsAsyncResult<Unit> (cb, extraData);
+        }
 
-    IAsyncResult IHttpAsyncHandler.BeginProcessRequest (HttpContext context, AsyncCallback cb, object extraData) {
-        return Observable.Defer<Unit> (() => 
-            ProcessRequestAsync (context)).AsAsyncResult (cb, extraData);
-    }
+        void IHttpAsyncHandler.EndProcessRequest (IAsyncResult result) {
+            IAsyncResult<Unit> ar = result as IAsyncResult<Unit>;
+            if (null == ar)
+                throw new ArgumentException ("result");
+            ar.AsyncWaitHandle.WaitOne ();
+            ar.ThrowIfExceptionEncountered ();
+        }
 
-    void IHttpAsyncHandler.EndProcessRequest (IAsyncResult result) {
-        var ar = result as IAsyncResult<Unit>;
-        if (null == ar)
-            throw new ArgumentNullException ("result");
+        bool IHttpHandler.IsReusable {
+            get { return true; }
+        }
 
-        ar.AsyncWaitHandle.WaitOne ();
-        ar.ThrowIfExceptionEncountered ();
+        void IHttpHandler.ProcessRequest (HttpContext context) {
+            ProcessRequestAsync (context).ForEach (_ => { });
+        }
     }
 }
 ```
