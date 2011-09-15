@@ -1,6 +1,6 @@
 ![corlib](corlib/raw/master/inc/corlib.png)
 # LICENSE
-Microsoft Reciprocal License (Ms-RL) <http://www.opensource.org/licenses/MS-RL>
+[Microsoft Reciprocal License (Ms-RL)](http://www.opensource.org/licenses/MS-RL)
 
 ## Get it on NuGet!
 
@@ -19,6 +19,7 @@ To get started:
 Calling Observable.Defer delays exceptions thrown from the abstract method to the Rx sequence which
 is subsequently picked up by the AsAsyncResult extension method who's ThrowIfExceptionEncountered method
 is called from the End APM method
+
 ```csharp
 using System;
 using System.Reactive;
