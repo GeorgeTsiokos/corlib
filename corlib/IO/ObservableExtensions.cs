@@ -24,23 +24,26 @@ namespace CorLib.IO {
                 stream.BeginWrite,
                 stream.EndWrite);
 
-            return sequence.Select(value =>
+            return sequence.Select (value =>
                 write (value.Item1, value.Item2, value.Item3));
         }
 
-        public static IObservable<Tuple<IDisposable<byte[]>, int, int>> WriteAsync (this IObservable<Tuple<IDisposable<byte[]>, int>> sequence, Stream stream) {
+        public static IObservable<IObservable<Unit>> WriteAsync (this IObservable<Tuple<IDisposable<byte[]>, int>> sequence, Stream stream) {
             var sequence_ = sequence.Select (value =>
                 new Tuple<IDisposable<byte[]>, int, int> (value.Item1, 0, value.Item2));
             return sequence_.WriteAsync (stream);
         }
 
-        public static IObservable<Tuple<IDisposable<byte[]>, int, int>> WriteAsync (this IObservable<Tuple<IDisposable<byte[]>, int, int>> sequence, Stream stream) {
+        public static IObservable<IObservable<Unit>> WriteAsync (this IObservable<Tuple<IDisposable<byte[]>, int, int>> sequence, Stream stream) {
             var write = Observable.FromAsyncPattern<byte[], int, int> (
                 stream.BeginWrite,
                 stream.EndWrite);
 
-            return sequence.SelectMany (value =>
-                write (value.Item1.Value, value.Item2, value.Item3).Select (_ => value));
+            return sequence.Select (value =>
+                write (value.Item1.Value, value.Item2, value.Item3).Select (_ => {
+                    value.Item1.Dispose ();
+                    return _;
+                }));
         }
     }
 }

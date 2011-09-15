@@ -43,7 +43,7 @@ namespace CorLib.IO {
                     };
 
                 loop = () => {
-                    var buffer = cache.TakeOrCreate (() =>
+                    var buffer = cache.TakeOrCreate (true, () =>
                         new byte[bufferSize]);
                     read (buffer.Value, 0, bufferSize).Subscribe (bytesRead => {
                         if (0 == bytesRead)

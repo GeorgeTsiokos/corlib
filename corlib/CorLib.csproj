@@ -110,10 +110,12 @@
     <Compile Include="CharArrayExtensions.cs" />
     <Compile Include="Collections\Concurrent\ConcurrentDictionaryExtensions.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableExtensions.cs" />
+    <Compile Include="Collections\Specialized\NameValueCollectionExtensions.cs" />
     <Compile Include="ExperimentalState.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Internal\AsyncResult`1.cs" />
     <Compile Include="IDisposable`1.cs" />
+    <Compile Include="Internal\Collections\Generic\RefCountDisposable`1.cs" />
     <Compile Include="Internal\Collections\Generic\ImmutableDisposable`1.cs" />
     <Compile Include="IO\ObservableExtensions.cs" />
     <Compile Include="IO\StreamExtensions.cs" />

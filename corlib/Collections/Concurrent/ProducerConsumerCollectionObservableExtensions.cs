@@ -11,10 +11,14 @@ namespace CorLib.Collections.Concurrent {
         /// <param name="collection">collection to remove the disposable value from</param>
         /// <param name="factory">function to create a new value</param>
         /// <returns></returns>
-        public static IDisposable<T> TakeOrCreate<T> (this IProducerConsumerCollection<IDisposable<T>> collection, Func<T> factory) {
+        public static IDisposable<T> TakeOrCreate<T> (this IProducerConsumerCollection<IDisposable<T>> collection, bool refCount, Func<T> factory) {
             IDisposable<T> result;
-            if (!collection.TryTake (out result))
-                result = new ImmutableDisposable<T> (collection, factory ());
+            if (!collection.TryTake (out result)) {
+                if (refCount)
+                    result = new RefCountDisposable<T> (collection, factory ());
+                else
+                    result = new ImmutableDisposable<T> (collection, factory ());
+            }
             return result;
         }
     }
