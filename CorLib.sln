@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorLib-Test", "corlib-test\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29C96BF9-27D6-4E9C-A4AE-C1D4CD3A914B}"
 	ProjectSection(SolutionItems) = preProject
-		CorLib.0.0.0.9.nuspec = CorLib.0.0.0.9.nuspec
+		CorLib.nuspec = CorLib.nuspec
 		CorLib.vsmdi = CorLib.vsmdi
 		Local.testsettings = Local.testsettings
 		README.md = README.md

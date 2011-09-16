@@ -2,16 +2,28 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CorLib</id>
-    <version>0.0.0.9</version>
+    <version>0.0.1.0</version>
     <title />
     <authors>George Tsiokos</authors>
     <owners />
     <licenseUrl>http://www.opensource.org/licenses/MS-RL</licenseUrl>
+    <projectUrl>https://github.com/HiTEC/corlib</projectUrl>
+    <iconUrl>https://github.com/HiTEC/corlib/raw/master/inc/corlib-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>CorLib is a class-library containing many useful types &amp; extension methods missing from the .NET Framework, including AsyncResult &amp; EventLoopSchedulerSlim!</description>
     <summary>Microsoft Reciprocal License (Ms-RL)</summary>
     <releaseNotes>Initial release</releaseNotes>
     <copyright>Copyright © George Tsiokos 2011</copyright>
+    <dependencies>
+      <dependency id="Rx-Main" version="1.0.10621" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
   </metadata>
-  <files />
+  <files>
+    <file src="lib\net40\corlib.dll" target="lib\net40\corlib.dll" />
+    <file src="lib\net40\corlib.xml" target="lib\net40\corlib.xml" />
+  </files>
 </package>
