@@ -118,6 +118,7 @@
     <Compile Include="Internal\Collections\Generic\ImmutableDisposable`1.cs" />
     <Compile Include="IO\ObservableExtensions.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
+    <Compile Include="Linq\EnumerableExtensions.cs" />
     <Compile Include="NullableTimeSpanExtensions.cs" />
     <Compile Include="Collections\Concurrent\ObservableExtensions.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableOptions.cs" />
