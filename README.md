@@ -19,6 +19,7 @@ To get started:
 Included in the CorLib.Threading namspace, the ToObservable extension method converts a CancellationToken
 into an IObservable<Unit> stream that represents the exact same states as a CancellationToken as shown
 in the extension method's implementation:
+
 ```csharp
 public static IObservable<Unit> ToObservable (this CancellationToken cancellationToken, bool onCompleted = false) {
     if (cancellationToken.IsCancellationRequested) {
