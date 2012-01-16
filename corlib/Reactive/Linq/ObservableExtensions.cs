@@ -7,15 +7,33 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using CorLib.Collections.Concurrent;
+using System.Diagnostics.Contracts;
+using System.ComponentModel;
 
-namespace CorLib.Reactive {
+namespace CorLib.Reactive.Linq {
 
     public static class ObservableExtensions {
 
-        public static ISubject<T> AsSubject<T> (this IObservable<T> sequence) {
-            var subject = new Subject<T> ();
-            sequence.Subscribe (subject);
-            return subject;
+        public static IObservable<Tuple<A, B>> CombineLatest<A, B> (this IObservable<A> sequeceA, IObservable<B> sequenceB) {
+            return sequeceA.CombineLatest<A, B, Tuple<A, B>> (sequenceB, (a, b) => new Tuple<A, B> (a, b));
+        }
+
+        /// <summary>Returns a filtered sequence where each value T is not equal to null</summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
+        public static IObservable<T> NotNull<T> (this IObservable<T> sequence) where T : class {
+            Contract.Requires (sequence != null, "sequence is null.");
+            return sequence.Where (item => null != item);
+        }
+
+        /// <summary>
+        /// Returns a filtered sequence where each value T is not equal to null or whitespace
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
+        public static IObservable<string> NotNullOrWhitespace (this IObservable<string> sequence) {
+            Contract.Requires (sequence != null, "sequence is null.");
+            return sequence.Where (item => !string.IsNullOrWhiteSpace (item));
         }
 
         /// <summary>Invokes a specified action after source observable sequence terminates normally or by an exception</summary>
@@ -70,8 +88,8 @@ namespace CorLib.Reactive {
             return sequence.Concat<T> (Observable.Defer<T> (nextSequence));
         }
 
-        public static IObservable<T> IgnoreElementsContinueWith<X, T> (this IObservable<X> sequence, Func<IObservable<T>> nextSequence) {
-            return sequence.IgnoreElements ().Select (_ => 
+        public static IObservable<T> ContinueWith<X, T> (this IObservable<X> sequence, Func<IObservable<T>> nextSequence) {
+            return sequence.IgnoreElements ().Select (_ =>
                 default (T)).ContinueWith<T> (nextSequence);
         }
 
@@ -88,14 +106,15 @@ namespace CorLib.Reactive {
                     subject.Finally (() => dictionary.TryRemove (key)).Subscribe ();
                 }
                 catch (Exception exception) {
-                    subject = Observable.Throw<TValue> (exception).AsSubject ();
+                    //TODO: verify
+                    subject = new AsyncSubject<TValue> ();
+                    Observable.Throw<TValue> (exception).Subscribe (subject);
                 }
                 return subject;
             };
             return key => dictionary.GetOrAdd (key, factory_);
         }
 
-#if EXPERIMENTAL
         /// <summary>
         /// Detects conncurrent OnNext calls from <paramref name="sequence"/>
         /// </summary>
@@ -103,7 +122,6 @@ namespace CorLib.Reactive {
         /// <param name="sequence">sequence to watch</param>
         /// <param name="timeSpan">window of time to detect concurrent signals</param>
         /// <returns>a sequence that completes when concurrent signals are detected</returns>
-        [ExperimentalAttribute (State = ExperimentalState.RequiresAdditionalTesting)]
         public static IObservable<Unit> SignalsConcurrently<T> (this IObservable<T> sequence, TimeSpan timeSpan) {
             var flag = new ManualResetEventSlim ();
             int counter = 0;
@@ -118,6 +136,5 @@ namespace CorLib.Reactive {
                     Interlocked.Decrement (ref counter);
                 })).Using (flag);
         }
-#endif
     }
 }
