@@ -1,5 +1,6 @@
-﻿using System.Collections.Concurrent;
-using System;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Diagnostics.Contracts;
 
 namespace CorLib.Collections.Concurrent {
 
@@ -11,10 +12,10 @@ namespace CorLib.Collections.Concurrent {
         /// <param name="dictionary">the dictionary to remove the item from</param>
         /// <param name="key">The key of the element to remove</param>
         /// <returns>true if an object was removed successfully; otherwise, false</returns>
-        /// <exception cref="ArgumentNullException">key or dictionary is a null reference</exception>
+        /// <remarks>Calls TryRemove and throws away the unused result</remarks>
         public static bool TryRemove<TKey, TValue> (this ConcurrentDictionary<TKey, TValue> dictionary, TKey key) {
-            if (dictionary == null)
-                throw new ArgumentNullException ("dictionary", "dictionary is null.");
+            Contract.Requires (null != dictionary, "dictionary is null");
+            Contract.Requires (null != key, "key is null");
             TValue unused;
             return dictionary.TryRemove (key, out unused);
         }

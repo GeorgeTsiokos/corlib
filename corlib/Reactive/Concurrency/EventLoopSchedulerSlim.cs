@@ -3,8 +3,8 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using System.Threading;
 using CorLib.Diagnostics;
+using CorLib.Threading;
 
 namespace CorLib.Reactive.Concurrency {
 
@@ -15,10 +15,10 @@ namespace CorLib.Reactive.Concurrency {
     [DebuggerDisplay ("Count = {Count}")]
     public class EventLoopSchedulerSlim : IScheduler {
 
+        readonly Gate _gate = new Gate ();
         readonly ConcurrentQueue<Action> _queue = new ConcurrentQueue<Action> ();
         readonly IScheduler _scheduler;
         readonly Action<Exception> _exceptionHandler;
-        int _lock;
 
         /// <summary>
         /// Creates a new instance with the specified scheduler and unhandled exception handler
@@ -78,7 +78,7 @@ namespace CorLib.Reactive.Concurrency {
                     result.Disposable = action (this, state);
             });
 
-            if (TryAquireLock ())
+            if (_gate.TryOpen ())
                 _scheduler.Schedule (Loop);
 
             return result;
@@ -86,32 +86,15 @@ namespace CorLib.Reactive.Concurrency {
 
         void Loop () {
             Action action;
-            do {
-                while (_queue.TryDequeue (out action))
-                    try {
-                        action ();
-                    }
-                    catch (Exception exception) {
-                        _exceptionHandler (exception);
-                    }
-
-                if (!TryReleaseLock ()) {
-                    _exceptionHandler (
-                        new Exception ("!TryReleaseLock"));
-                    return;
+            while (_queue.TryDequeue (out action))
+                try {
+                    action ();
+                }
+                catch (Exception exception) {
+                    _exceptionHandler (exception);
                 }
 
-                // if the queue has an item, and we're able to aquire the lock again, loop
-            }
-            while (!_queue.IsEmpty && TryAquireLock ());
-        }
-
-        bool TryAquireLock () {
-            return 0 == Interlocked.CompareExchange (ref _lock, 1, 0);
-        }
-
-        bool TryReleaseLock () {
-            return 1 == Interlocked.CompareExchange (ref _lock, 0, 1);
+            _gate.Close ();
         }
     }
 }

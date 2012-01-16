@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace CorLib.Collections.Generic {
 
+    /// <summary>
+    /// A collection where <see cref="WeakReference"/>s are held for each item
+    /// </summary>
     public class WeakReferenceCollection<T> : ICollection<T> {
 
         readonly ICollection<WeakReference> _collection;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Diagnostics.Contracts;
 
 namespace CorLib {
     /// <summary>
@@ -14,12 +15,16 @@ namespace CorLib {
         /// <param name="timeout">the value to convert</param>
         /// <returns><see cref="System.Threading.Timeout.Infinite"/> or a positive int representing milliseconds</returns>
         public static int AsThreadingTimeout (this TimeSpan? timeout) {
+            Contract.Ensures (Contract.Result<int> () >= -1);
+
             if (null == timeout)
                 return Timeout.Infinite;
             else {
                 double timeout_ = timeout.Value.TotalMilliseconds;
                 if (timeout_ > int.MaxValue)
                     return int.MaxValue;
+                else if (timeout_ < 0)
+                    return 0;
                 else
                     return (int)timeout_;
             }

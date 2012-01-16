@@ -8,7 +8,7 @@ namespace CorLib.Threading {
     /// </summary>
     /// <remarks>
     /// By default, this type's value will start at (9,223,372,036,854,775,808). In addition, this type 
-    /// will not throw an overflow exception. The value will reset to 0 when  incremented 
+    /// will not throw an overflow exception. The value will reset to 0 when incremented 
     /// past (18,446,744,073,709,551,615). <see cref="AtomicUInt64.Info"/>
     /// </remarks>
     [CLSCompliant (false)]

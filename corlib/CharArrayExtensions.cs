@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace CorLib {
     /// <summary>
@@ -16,16 +17,16 @@ namespace CorLib {
         /// <param name="count">how many chars to eval in <paramref name="source"/></param>
         /// <returns>the char[] that was found, and the index</returns>
         public static IEnumerable<Tuple<char[], int>> IndexOfAll (this char[] source, char[][] values, int startIndex, int count) {
-            if (startIndex < 0)
-                throw new ArgumentOutOfRangeException ("startIndex");
-            if (count < 1)
-                throw new ArgumentOutOfRangeException ("count");
-            if (source == null || source.Length == 0 || values == null)
+            Contract.Requires (null != source);
+            Contract.Requires (null != values);
+            Contract.Requires (startIndex > -1);
+            Contract.Requires (startIndex > 0);
+
+            int valuesLength = values.Length;
+            if (source.Length < 1 || valuesLength < 1)
                 yield break;
 
             bool result = false;
-            int valuesLength = values.Length;
-
             for (int i = startIndex; i < count; i++) {
                 for (int v = 0; v < valuesLength; v++) {
                     int valueLength = values[v].Length;
