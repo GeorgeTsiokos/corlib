@@ -1,29 +1,32 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <id>CorLib</id>
-    <version>0.0.1.0</version>
-    <title />
+    <version>0.0.2.0</version>
     <authors>George Tsiokos</authors>
     <owners />
     <licenseUrl>http://www.opensource.org/licenses/MS-RL</licenseUrl>
     <projectUrl>https://github.com/HiTEC/corlib</projectUrl>
     <iconUrl>https://github.com/HiTEC/corlib/raw/master/inc/corlib-icon.png</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>CorLib is a class-library containing many useful types &amp; extension methods missing from the .NET Framework, including AsyncResult &amp; EventLoopSchedulerSlim!</description>
-    <summary>Microsoft Reciprocal License (Ms-RL)</summary>
-    <releaseNotes>Initial release</releaseNotes>
-    <copyright>Copyright © George Tsiokos 2011</copyright>
     <dependencies>
-      <dependency id="Rx-Main" version="1.0.10621" />
+      <dependency id="Rx-Main" version="1.0.11226" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
       <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0" />
     </frameworkAssemblies>
+    <id>CorLib</id>
+    <title />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>CorLib is a class-library containing many useful types missing from the .NET Framework, such as Gate, AtomicUInt64, &amp; EventLoopSchedulerSlim, and extension methods expanding on Rx's ToTask for APM integration, as well as WaitHandle conversions to IObsevable&lt;Unit&gt;!</description>
+    <summary>Microsoft Reciprocal License (Ms-RL)</summary>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Copyright © George Tsiokos 2011</copyright>
+    <language>en-US</language>
+    <tags>Rx Reactive Extensions Observable Threading Task Concurrency Async Asynchronous IAsyncResult</tags>
   </metadata>
   <files>
-    <file src="lib\net40\corlib.dll" target="lib\net40\corlib.dll" />
-    <file src="lib\net40\corlib.xml" target="lib\net40\corlib.xml" />
+    <file src="corlib\bin\Publish\corlib.dll" target="lib\net40\corlib.dll" />
+    <file src="corlib\bin\Publish\corlib.xml" target="lib\net40\corlib.xml" />
+    <file src="corlib\bin\Publish\CodeContracts\corlib.Contracts.dll" target="lib\net40\CodeContracts\corlib.Contracts.dll" />
   </files>
 </package>

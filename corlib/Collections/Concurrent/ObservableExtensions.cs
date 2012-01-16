@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
-using CorLib.Diagnostics;
-using CorLib.Reactive;
 using CorLib.Threading;
 
-#if EXPERIMENTAL
 namespace CorLib.Collections.Concurrent {
 
-    [Experimental (State = ExperimentalState.RequiresFeedback)]
     public static class ObservableExtensions {
 
+        /// <summary>
+        /// Each item published to the observable sequence is added to the collection
+        /// </summary>
+        /// <param name="sequence">input observable sequence</param>
+        /// <param name="collection">collection to add the items to</param>
+        /// <returns>a disposable to unsubscribe the collection from the sequence</returns>
+        /// <remarks>if the collection returns false during TryAdd the collection unsubscribes from the sequence</remarks>
         public static IDisposable Subscribe<T> (this IObservable<T> sequence, IProducerConsumerCollection<T> collection) {
             var subscription = new SingleAssignmentDisposable ();
             subscription.Disposable = sequence.Subscribe (value => {
@@ -24,112 +26,83 @@ namespace CorLib.Collections.Concurrent {
             return subscription;
         }
 
-        public static IObservable<T> ToObservable<T> (this IEnumerable<IProducerConsumerCollection<T>> collections, ProducerConsumerCollectionObservableOptions options) {
-            //TODO: divide the option values across the number of collections
-            List<IObservable<T>> results = new List<IObservable<T>> ();
-            foreach (var collection in collections)
-                results.Add (collection.ToObservable<T> (options));
-            return Observable.Concat (results);
-        }
-
-        public static IObservable<T> ToObservable<T> (this IProducerConsumerCollection<T> collection) {
-            return ToObservable (collection, new ProducerConsumerCollectionObservableOptions ());
-        }
-
-        [Experimental]
+        /// <summary>
+        /// Converts a <see cref="IProducerConsumerCollection`1"/> to an observable sequence
+        /// </summary>
+        /// <param name="collection">collection to convert to a sequence</param>
+        /// <param name="options">timeout, poll interval, boundedCapacity, and scheduler</param>
+        /// <returns>an observable sequence</returns>
         public static IObservable<T> ToObservable<T> (this IProducerConsumerCollection<T> collection, ProducerConsumerCollectionObservableOptions options) {
-            var cts = new CancellationTokenSource ();
-            var globalToken = cts.Token;
+            Action take;
+            var multipleAssignmentDisposable = new MultipleAssignmentDisposable ();
 
             return Observable.Create<T> (observer => {
 
-                var blockingCollectionSequence = options.BoundedCapacityChanged.Select (value =>
-                    value.HasValue ? new BlockingCollection<T> (collection, value.Value) :
-                    new BlockingCollection<T> (collection));
-                var minDegreeOfParallelismSequence = options.MinDegreeOfParallelismChanged;
-                var blockingWorkerSchedulerSequence = options.BlockingWorkerSchedulerChanged;
+                Action takeCompleted = observer.OnCompleted;
+                var sequence = options.Sequence.Publish ();
+                var cancellationToken = sequence.Take (1).ToCancellationTokenSource ().Token;
 
-                /* Restart the blocking workers when the following properties change
-                 * BoundedCapacity
-                 * MinDegreeOfParallelism
-                 * BlockingWorkerScheduler */
-                var blockingWorkerSequence = blockingCollectionSequence.CombineLatest (minDegreeOfParallelismSequence, (bc, mdop) =>
-                    new { bc, mdop }).CombineLatest (blockingWorkerSchedulerSequence, (a, hs) =>
-                        new { bc = a.bc, mdop = a.mdop, hs = hs }).TakeUntil (globalToken).Publish ().RefCount ();
+                var optionSubscription = sequence.Subscribe (value => {
+                    var timeout = value.Item1;
+                    var pollInterval = value.Item2;
+                    var scheduler = value.Item3;
+                    var boundedCapacity = value.Item4;
 
-                blockingWorkerSequence.Subscribe (state => {
-                    int minWorkerCount = 0;
-                    var token = blockingWorkerSequence.Take (1).AsCancellationToken ().First ();
+                    if (timeout.HasValue) {
+                        var millisecondsTimeout = timeout.AsThreadingTimeout ();
 
-                    while (minWorkerCount++ < state.mdop) {
-                        state.hs.Schedule (() => {
-                            foreach (T item in state.bc.GetConsumingEnumerable (token))
-                                observer.OnNext (item);
-                        });
+                        var blockingCollection = boundedCapacity.HasValue ?
+                            new BlockingCollection<T> (collection, boundedCapacity.Value) :
+                            new BlockingCollection<T> (collection);
+
+                        if (pollInterval.HasValue)
+                            takeCompleted = () => {
+                                if (!cancellationToken.IsCancellationRequested)
+                                    multipleAssignmentDisposable.Disposable = scheduler.Schedule (pollInterval.Value, () =>
+                                        Take (blockingCollection, observer, millisecondsTimeout, cancellationToken, takeCompleted));
+                            };
+
+                        take = () =>
+                            multipleAssignmentDisposable.Disposable = scheduler.Schedule (() =>
+                                Take (blockingCollection, observer, millisecondsTimeout, cancellationToken, takeCompleted));
                     }
+                    else {
+                        if (pollInterval.HasValue)
+                            takeCompleted = () => {
+                                if (!cancellationToken.IsCancellationRequested)
+                                    multipleAssignmentDisposable.Disposable = scheduler.Schedule (pollInterval.Value, () =>
+                                        Take (collection, observer, takeCompleted));
+                            };
+
+                        take = () =>
+                            multipleAssignmentDisposable.Disposable = scheduler.Schedule (() =>
+                                Take (collection, observer, takeCompleted));
+                    }
+
+                    multipleAssignmentDisposable.Disposable = options.Scheduler.Schedule (take);
                 });
 
-                var workerCountSequence = minDegreeOfParallelismSequence;
-                var millisecondsTimeoutSequence = options.WorkerTimeoutChanged.Select (value => Convert.ToInt32 (value.TotalMilliseconds));
-                var timeoutSchedulerSequence = options.LightSchedulerChanged;
-                var timeoutWorkerSequence = workerCountSequence.CombineLatest (blockingCollectionSequence, (wc, bc) =>
-                    new { wc, bc }).CombineLatest (millisecondsTimeoutSequence, (a, wt) =>
-                        new { wc = a.wc, bc = a.bc, wt }).CombineLatest (timeoutSchedulerSequence, (b, ts) =>
-                            new { wc = b.wc, bc = b.bc, wt = b.wt, ts = ts }).TakeUntil (globalToken).Publish ().RefCount ();
+                return new CompositeDisposable (
+                    sequence.Connect (),
+                    multipleAssignmentDisposable,
+                    optionSubscription);
+            });
+        }
 
-                timeoutWorkerSequence.Subscribe (state => {
-                    int workerCount = state.wc;
-                    var token = timeoutWorkerSequence.Take (1).AsCancellationToken ().First ();
+        static void Take<T> (IProducerConsumerCollection<T> collection, IObserver<T> observer, Action takeCompleted) {
+            T item;
+            while (collection.TryTake (out item))
+                observer.OnNext (item);
 
-                    Action worker = () => {
-                        T item;
-                        try {
-                            while (state.bc.TryTake (out item, state.wt, token))
-                                observer.OnNext (item);
-                        }
-                        finally {
-                            Interlocked.Decrement (ref workerCount);
-                        }
-                    };
+            takeCompleted ();
+        }
 
-                    Action addWorker = () => {
-                        Interlocked.Increment (ref workerCount);
-                        state.ts.Schedule (worker);
-                    };
+        static void Take<T> (BlockingCollection<T> collection, IObserver<T> observer, int timeout, CancellationToken cancellationToken, Action takeCompleted) {
+            T item;
+            while (collection.TryTake (out item, timeout, cancellationToken))
+                observer.OnNext (item);
 
-                    addWorker ();
-
-                    var blockingCollection = state.bc;
-                    var taskScheduler = state.ts;
-                    int workerCreationTimeout = 50;
-                    TimeSpan workerCreationInterval = TimeSpan.FromSeconds (workerCount * 30);
-                    int workerCreationPeriod = 10;
-                    int maxDegreeOfParallelism = options.MaxDegreeOfParallelism;
-                    Action workerFactory = null;
-
-                    workerFactory = () => {
-                        try {
-                            if (workerCount >= maxDegreeOfParallelism)
-                                return;
-
-                            T item;
-                            for (int i = 0; i < workerCreationPeriod; i++) {
-                                if (!blockingCollection.TryTake (out item, workerCreationTimeout, token))
-                                    return;
-                                observer.OnNext (item);
-                            }
-                            addWorker ();
-                        }
-                        finally {
-                            taskScheduler.Schedule (workerCreationInterval, workerFactory);
-                        }
-                    };
-                    taskScheduler.Schedule (workerCreationInterval, workerFactory);
-                });
-
-                return new CancellationDisposable (cts);
-            }).Using (cts);
+            takeCompleted ();
         }
     }
 }
-#endif
