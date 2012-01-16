@@ -6,9 +6,7 @@
 [assembly: AssemblyCompany ("This open-source library is not affiliated with Microsoft Corporation")]
 [assembly: AssemblyCulture ("")]
 
-#if EXPERIMENTAL
-[assembly: AssemblyConfiguration ("EXPERIMENTAL")]
-#elif DEBUG
+#if DEBUG
 [assembly: AssemblyConfiguration("DEBUG")]
 #elif RELEASE
 [assembly: AssemblyConfiguration("RELEASE")]
