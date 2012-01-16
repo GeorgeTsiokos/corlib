@@ -1,30 +1,22 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
+using System.Diagnostics.Contracts;
+using System.Reactive;
+using CorLib.Threading;
 
 namespace CorLib {
 
     public static class ObservableExtensions {
 
         /// <summary>
-        /// Takes a single value from the sequence as an <see cref="IAsyncResult{T}"/>
+        /// Converts the <see cref="IAsyncResult"/> to an obserable sequence
         /// </summary>
-        /// <param name="sequence">sequence to take one value from</param>
-        /// <param name="asyncCallback">APM callback</param>
-        /// <param name="state">APM state</param>
-        /// <returns>an async result representing the single value from the sequence</returns>
-        /// <remarks>if the sequence errors, returns a value, or completes empty, the async result signals</remarks>
-        public static IAsyncResult<T> AsAsyncResult<T> (this IObservable<T> sequence, AsyncCallback asyncCallback, object state) {
-            if (sequence == null)
-                return AsyncResult.CreateCompleted<T> (
-                    asyncCallback,
-                    state,
-                    new ArgumentNullException ("sequence", "sequence is null."));
-
-            var result = AsyncResult.Create<T> (asyncCallback, state);
-            // subscription will be completed when the sequence produces a single value, errors, or completes
-            sequence.Take (1).Subscribe (result);
-            return result;
+        /// <param name="asyncResult">The asynchrous operation</param>
+        /// <param name="timeout">Optional timeout</param>
+        /// <returns>An observable sequence</returns>
+        public static IObservable<Unit> ToObservable (this IAsyncResult asyncResult, TimeSpan? timeout = null) {
+            Contract.Requires (null != asyncResult, "null == asyncResult");
+            Contract.Requires (null != asyncResult.AsyncWaitHandle, "null == asyncResult.AsyncWaitHandle");
+            return asyncResult.AsyncWaitHandle.ToObservable (true, timeout);
         }
     }
 }
