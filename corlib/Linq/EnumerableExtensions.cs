@@ -1,9 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Linq;
+using System.Linq;
+using System.Diagnostics.Contracts;
 
 namespace CorLib.Linq {
 
     public static class EnumerableExtensions {
+
+        /// <summary>Returns a filtered sequence where each value T is not equal to null</summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> NotNull<T> (this IEnumerable<T> sequence) where T : class {
+            Contract.Requires (sequence != null, "sequence is null.");
+            return sequence.Where (item => null != item);
+        }
+
+        /// <summary>
+        /// Returns a filtered sequence where each value T is not equal to null or whitespace
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> NotNullOrWhitespace (this IEnumerable<string> sequence) {
+            Contract.Requires (sequence != null, "sequence is null.");
+            return sequence.Where (item => !string.IsNullOrWhiteSpace (item));
+        }
 
         /// <summary>
         /// Returns a specified number of contiguous elements from the end of an enumerable sequence.

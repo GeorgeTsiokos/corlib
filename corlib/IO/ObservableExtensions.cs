@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
-using CorLib.Reactive;
 
 namespace CorLib.IO {
 

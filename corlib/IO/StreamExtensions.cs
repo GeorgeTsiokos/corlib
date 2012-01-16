@@ -9,11 +9,21 @@ namespace CorLib.IO {
 
     public static class StreamExtensions {
 
-        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadAsync (this Stream stream, int bufferSize, bool waitForObserver) {
-            return ReadAsync (stream, bufferSize, waitForObserver, new ConcurrentBag<IDisposable<byte[]>> ());
+        public static IObservable<byte[]> ReadAsync (this Stream stream, int bufferSize) {
+            return stream.ReadAsync (bufferSize, true, false).Select (value => {
+                byte[] result = new byte[value.Item2];
+                using (IDisposable<byte[]> source = value.Item1) {
+                    Array.Copy (source.Value, 0, result, 0, value.Item2);
+                }
+                return result;
+            });
         }
 
-        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadAsync (this Stream stream, int bufferSize, bool waitForObserver, IProducerConsumerCollection<IDisposable<byte[]>> cache) {
+        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadAsync (this Stream stream, int bufferSize, bool waitForObserver, bool refCount) {
+            return ReadAsync (stream, bufferSize, waitForObserver, refCount, new ConcurrentBag<IDisposable<byte[]>> ());
+        }
+
+        public static IObservable<Tuple<IDisposable<byte[]>, int>> ReadAsync (this Stream stream, int bufferSize, bool waitForObserver, bool refCount, IProducerConsumerCollection<IDisposable<byte[]>> cache) {
             var read = Observable.FromAsyncPattern<byte[], int, int, int> (stream.BeginRead, stream.EndRead);
 
             return Observable.Create<Tuple<IDisposable<byte[]>, int>> (observer => {
@@ -43,7 +53,7 @@ namespace CorLib.IO {
                     };
 
                 loop = () => {
-                    var buffer = cache.TakeOrCreate (true, () =>
+                    var buffer = cache.TakeOrCreate (refCount, () =>
                         new byte[bufferSize]);
                     read (buffer.Value, 0, bufferSize).Subscribe (bytesRead => {
                         if (0 == bytesRead)
