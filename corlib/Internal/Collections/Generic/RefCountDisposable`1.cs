@@ -27,7 +27,7 @@ namespace CorLib.Internal.Collections.Generic {
             if (0 == Interlocked.Decrement (ref _count)) {
                 var collection = Interlocked.Exchange (ref _collection, null);
                 if (null != collection)
-                    collection.TryAdd (this);
+                    collection.TryAdd (new RefCountDisposable<T> (collection, _value));
             }
         }
     }

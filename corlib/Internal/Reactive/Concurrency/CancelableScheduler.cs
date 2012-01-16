@@ -48,7 +48,7 @@ namespace CorLib.Reactive.Concurrency {
             if (_mode.HasFlag (CancellationCheckMode.OnExecute))
                 return _scheduler.Schedule (() => CheckForCancellation (state, action));
             else
-                return _scheduler.Schedule (() => action (this, state));
+                return _scheduler.Schedule (state, action);
         }
 
         IDisposable CheckForCancellation<TState> (TState state, Func<IScheduler, TState, IDisposable> action) {

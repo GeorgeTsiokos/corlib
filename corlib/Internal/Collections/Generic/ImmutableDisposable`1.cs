@@ -22,7 +22,7 @@ namespace CorLib.Internal.Collections.Generic {
         public void Dispose () {
             var collection = Interlocked.Exchange (ref _collection, null);
             if (null != collection)
-                collection.TryAdd (this);
+                collection.TryAdd (new ImmutableDisposable<T> (collection, _value));
         }
     }
 }
