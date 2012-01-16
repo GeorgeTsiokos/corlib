@@ -3,6 +3,7 @@ using CorLib.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Diagnostics.Contracts;
 
 namespace CorLib {
 
@@ -56,7 +57,9 @@ namespace CorLib {
         }
 
         static bool TryDispose (IEnumerable<IDisposable> disposables, Lazy<Action<Exception>> exceptionHandler) {
+            Contract.Requires (null != disposables);
             var invokeDispose = disposables.Select (disposable => disposable.TryDispose (exceptionHandler));
+            //TODO: parameterize
             var invokeInParallel = invokeDispose.AsParallel ();
             var storeResultsInArray = invokeInParallel.ToArray ();
             var allResultsAreTrue = storeResultsInArray.All (result => result);
