@@ -59,7 +59,7 @@ namespace CorLib.Threading {
         /// </summary>
         /// <returns>true if the operation was successful</returns>
         public bool TryOpen () {
-            return 0 == Interlocked.CompareExchange (ref _value, 0, 1);
+            return 0 == Interlocked.CompareExchange (ref _value, 1, 0);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace CorLib.Threading {
         /// </summary>
         /// <returns>true if the operation was successful</returns>
         public bool TryClose () {
-            return 1 == Interlocked.CompareExchange (ref _value, 1, 0);
+            return 1 == Interlocked.CompareExchange (ref _value, 0, 1);
         }
     }
 }
