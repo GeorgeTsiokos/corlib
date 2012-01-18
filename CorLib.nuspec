@@ -19,7 +19,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>CorLib is a class-library containing many useful types missing from the .NET Framework, such as Gate, AtomicUInt64, &amp; EventLoopSchedulerSlim, and extension methods expanding on Rx's ToTask for APM integration, as well as WaitHandle conversions to IObsevable&lt;Unit&gt;!</description>
     <summary>Microsoft Reciprocal License (Ms-RL)</summary>
-    <releaseNotes>Corrected TaskUtilities visibility & implementation of AsyncCallback in ToTask</releaseNotes>
+    <releaseNotes>Corrected TaskUtilities visibility and implementation of AsyncCallback in ToTask</releaseNotes>
     <copyright>Copyright © George Tsiokos 2011</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable Threading Task Concurrency Async Asynchronous IAsyncResult</tags>
