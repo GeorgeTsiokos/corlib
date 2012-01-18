@@ -22,17 +22,11 @@ namespace CorLib.Threading.Tasks {
             Contract.Assume (Contract.Result<Task<T>> () != null);
             Contract.Assert (default (CancellationToken) == CancellationToken.None);
 
-            // if a callback isn't specified, route to Reactive's implementation
-            if (null == asyncCallback)
-                return sequence.ToTask<T> (cancellationToken, state);
+            var task = sequence.ToTask<T> (cancellationToken, state);
 
-            Task<T> task = null;
-            // add AsyncCallback call for OnError and OnCompleted of sequence
-            sequence = sequence.Do (_ => { }, ex =>
-                asyncCallback (task), () =>
-                asyncCallback (task));
-            // convert new sequence to a Task<T> via Reactive's extension method
-            task = sequence.ToTask (cancellationToken, state);
+            // if a callback is specified, invoke it after the task completes
+            if (null == asyncCallback)
+                task.ContinueWith (_ => asyncCallback (task));
 
             return task;
         }

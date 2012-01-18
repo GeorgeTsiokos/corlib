@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.0.2.2</version>
+    <version>0.0.2.3</version>
     <authors>George Tsiokos</authors>
     <owners />
     <licenseUrl>http://www.opensource.org/licenses/MS-RL</licenseUrl>
@@ -19,7 +19,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>CorLib is a class-library containing many useful types missing from the .NET Framework, such as Gate, AtomicUInt64, &amp; EventLoopSchedulerSlim, and extension methods expanding on Rx's ToTask for APM integration, as well as WaitHandle conversions to IObsevable&lt;Unit&gt;!</description>
     <summary>Microsoft Reciprocal License (Ms-RL)</summary>
-    <releaseNotes>Added GateTest, corrected TryOpen and TryClose, added references to ensure contract assembly would not be referenced</releaseNotes>
+    <releaseNotes>Corrected TaskUtilities visibility & implementation of AsyncCallback in ToTask</releaseNotes>
     <copyright>Copyright © George Tsiokos 2011</copyright>
     <language>en-US</language>
     <tags>Rx Reactive Extensions Observable Threading Task Concurrency Async Asynchronous IAsyncResult</tags>
