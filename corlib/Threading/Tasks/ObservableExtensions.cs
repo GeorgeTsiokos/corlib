@@ -25,7 +25,7 @@ namespace CorLib.Threading.Tasks {
             var task = sequence.ToTask<T> (cancellationToken, state);
 
             // if a callback is specified, invoke it after the task completes
-            if (null == asyncCallback)
+            if (null != asyncCallback)
                 task.ContinueWith (_ => asyncCallback (task));
 
             return task;
