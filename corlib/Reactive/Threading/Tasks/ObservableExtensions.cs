@@ -19,8 +19,8 @@ namespace CorLib.Reactive.Threading.Tasks {
         /// <param name="state">The state to use as the underlying task's AsyncState</param>
         /// <param name="asyncCallback">The method to be called when the asynchronous task completes</param>
         /// <returns>A task that contains the last value of the observable sequence</returns>
-        /// <remarks>Recommanded usage is sequence.Take(1).ToTask()</remarks>
-        public static Task<T> ToTask<T> (this IObservable<T> sequence, CancellationToken cancellationToken = default(CancellationToken), object state = null, AsyncCallback asyncCallback = null) {
+        /// <remarks>Recommanded usage is sequence.Take(1).ToTask(...)</remarks>
+        public static Task<T> ToTask<T> (this IObservable<T> sequence, AsyncCallback asyncCallback = null, object state = null, CancellationToken cancellationToken = default(CancellationToken)) {
             Contract.Requires (sequence != null);
             Contract.Assume (Contract.Result<Task<T>> () != null);
 
