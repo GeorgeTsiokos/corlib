@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CorLib.Threading.Tasks {
+namespace CorLib.Reactive.Threading.Tasks {
 
+    /// <summary>
+    /// Provides a set of static methods for converting IObservables to Tasks.
+    /// </summary>
     public static class ObservableExtensions {
 
         /// <summary>
@@ -18,15 +21,16 @@ namespace CorLib.Threading.Tasks {
         /// <returns>A task that contains the last value of the observable sequence</returns>
         /// <remarks>Recommanded usage is sequence.Take(1).ToTask()</remarks>
         public static Task<T> ToTask<T> (this IObservable<T> sequence, CancellationToken cancellationToken = default(CancellationToken), object state = null, AsyncCallback asyncCallback = null) {
-            Contract.Requires (sequence != null, "sequence == null");
+            Contract.Requires (sequence != null);
             Contract.Assume (Contract.Result<Task<T>> () != null);
-            Contract.Assert (default (CancellationToken) == CancellationToken.None);
 
-            var task = sequence.ToTask<T> (cancellationToken, state);
+            // call Rx's implementation to convert sequence to a task
+            var task = TaskObservableExtensions.ToTask (sequence, cancellationToken, state);
 
             // if a callback is specified, invoke it after the task completes
             if (null != asyncCallback)
-                task.ContinueWith (_ => asyncCallback (task));
+                task.ContinueWith (_ =>
+                    asyncCallback (task));
 
             return task;
         }

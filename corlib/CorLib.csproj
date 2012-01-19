@@ -163,7 +163,7 @@
     <Compile Include="Diagnostics\ExceptionHandler.cs" />
     <Compile Include="Internal\Reactive\Concurrency\CancelableScheduler.cs" />
     <Compile Include="ObservableExtensions.cs" />
-    <Compile Include="Threading\Tasks\ObservableExtensions.cs" />
+    <Compile Include="Reactive\Threading\Tasks\ObservableExtensions.cs" />
     <Compile Include="Reactive\Concurrency\CancellationMode.cs" />
     <Compile Include="Reactive\Concurrency\QueuedScheduler.cs" />
     <Compile Include="Reactive\Concurrency\SchedulerExtensions.cs" />
