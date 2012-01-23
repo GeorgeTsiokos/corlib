@@ -1,18 +1,60 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using CorLib.Collections.Concurrent;
-using System.Diagnostics.Contracts;
-using System.ComponentModel;
+using CorLib.Collections.Generic;
 
 namespace CorLib.Reactive.Linq {
 
     public static class ObservableExtensions {
+
+        public static IEnumerable<T> ToEnumerable<T> (this IObservable<T> sequence, int? boundedCapacity = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default(CancellationToken)) {
+            return ToEnumerable<T, ConcurrentQueue<Notification<T>>> (sequence, boundedCapacity, timeout, cancellationToken);
+        }
+
+        public static IEnumerable<T> ToEnumerable<T, CollectionType> (this IObservable<T> sequence, int? boundedCapacity = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default(CancellationToken)) where CollectionType : IProducerConsumerCollection<Notification<T>>, new () {
+            return new AnonymousEnumerable<T> (() => {
+
+                var producerConsumerCollection = new CollectionType ();
+                BlockingCollection<Notification<T>> collection = boundedCapacity.HasValue ?
+                    new BlockingCollection<Notification<T>> (producerConsumerCollection, boundedCapacity.Value) :
+                    new BlockingCollection<Notification<T>> (producerConsumerCollection);
+
+                var subscription = sequence.Materialize ().Subscribe ((IProducerConsumerCollection<Notification<T>>) collection);
+
+                Notification<T> item = null;
+                Func<T> current = () => item.Value;
+                var disposable = new CompositeDisposable (subscription, collection);
+                Action dispose = disposable.Dispose;
+                Func<bool> moveNext;
+                Action reset = () => { throw new NotSupportedException (); };
+
+                if (timeout.HasValue) {
+                    var timeoutValue = timeout.AsThreadingTimeout ();
+                    moveNext = () =>
+                        collection.TryTake (out item, timeoutValue, cancellationToken);
+                }
+                else {
+                    moveNext = () => {
+                        try {
+                            item = collection.Take (cancellationToken);
+                        }
+                        catch (Exception exception) {
+                            item = Notification.CreateOnError<T> (exception);
+                        }
+                        return true;
+                    };
+                }
+
+                return new AnonymousEnumerator<T> (current, dispose, moveNext, reset);
+            });
+        }
 
         public static IObservable<Tuple<A, B>> CombineLatest<A, B> (this IObservable<A> sequeceA, IObservable<B> sequenceB) {
             return sequeceA.CombineLatest<A, B, Tuple<A, B>> (sequenceB, (a, b) => new Tuple<A, B> (a, b));
