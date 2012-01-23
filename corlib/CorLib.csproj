@@ -145,6 +145,7 @@
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableExtensions.cs" />
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableOptions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
+    <Compile Include="Collections\Generic\AnonymousEnumerable`1.cs" />
     <Compile Include="Internal\Collections\Generic\ReadOnlyDictionary`1`2.cs" />
     <Compile Include="Collections\Specialized\NameValueCollectionExtensions.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedExtensions.cs" />
@@ -158,11 +159,13 @@
     <Compile Include="IO\ObservableExtensions.cs" />
     <Compile Include="IO\StreamExtensions.cs" />
     <Compile Include="Linq\EnumerableExtensions.cs" />
+    <Compile Include="Linq\ObjectSetLocation.cs" />
     <Compile Include="NullableTimeSpanExtensions.cs" />
     <Compile Include="Collections\Concurrent\ObservableExtensions.cs" />
     <Compile Include="Diagnostics\ExceptionHandler.cs" />
     <Compile Include="Internal\Reactive\Concurrency\CancelableScheduler.cs" />
     <Compile Include="ObservableExtensions.cs" />
+    <Compile Include="Collections\Generic\AnonymousEnumerator`1.cs" />
     <Compile Include="Reactive\Threading\Tasks\ObservableExtensions.cs" />
     <Compile Include="Reactive\Concurrency\CancellationMode.cs" />
     <Compile Include="Reactive\Concurrency\QueuedScheduler.cs" />
