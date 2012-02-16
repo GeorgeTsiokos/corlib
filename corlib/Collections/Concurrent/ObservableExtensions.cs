@@ -5,10 +5,57 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using CorLib.Threading;
+using System.Diagnostics.Contracts;
 
 namespace CorLib.Collections.Concurrent {
 
     public static class ObservableExtensions {
+
+        public static IDisposable Subscribe<TKey, TValue> (this IObservable<TValue> sequence, ConcurrentDictionary<TKey, TValue> dictionary, Func<TValue, TKey> keySelector) {
+            return sequence.Subscribe<TValue, TKey, TValue> (dictionary, keySelector, (key, value) => value);
+        }
+
+        public static IDisposable Subscribe<T, TKey, TValue> (this IObservable<T> sequence, ConcurrentDictionary<TKey, TValue> dictionary, Func<T, TKey> keySelector, Func<TKey, T, TValue> valueSelector, Func<T, bool> addOrUpdate = null, Func<T, bool> remove = null, Func<TKey, TValue, TValue> updateValueFactory = null) {
+            Contract.Requires (sequence != null, "sequence is null.");
+            Contract.Requires (dictionary != null, "dictionary is null.");
+            Contract.Requires (keySelector != null, "keySelector is null.");
+            Contract.Requires (valueSelector != null, "valueSelector is null.");
+            Contract.Requires (null == remove ||
+                              (null != addOrUpdate && null != remove), "addOrUpdate is required when remove is defined");
+
+            if (null == updateValueFactory)
+                updateValueFactory = (key, value) => value;
+
+            if (null == addOrUpdate)
+                if (null == remove)
+                    return sequence.Subscribe (item =>
+                        dictionary.AddOrUpdate (keySelector (item), key_ => valueSelector (key_, item), updateValueFactory)
+                    );
+                else
+                    return sequence.Subscribe (item => {
+                        if (remove (item))
+                            dictionary.TryRemove (keySelector (item));
+                        else
+                            dictionary.AddOrUpdate (keySelector (item), key_ => valueSelector (key_, item), updateValueFactory);
+                    }
+                );
+            else
+                if (null == remove)
+                    return sequence.Where (addOrUpdate).Subscribe (item =>
+                            dictionary.AddOrUpdate (keySelector (item), key_ => valueSelector (key_, item), updateValueFactory)
+                    );
+                else
+                    return sequence.Subscribe (item => {
+                        if (addOrUpdate (item))
+                            dictionary.AddOrUpdate (keySelector (item), key_ => valueSelector (key_, item), updateValueFactory);
+                        else if (remove (item))
+                            dictionary.TryRemove (keySelector (item));
+                    });
+        }
+
+        //static TValue DefaultValueSelector<T, TKey, TValue> (TKey key, T value) {
+
+        //}
 
         /// <summary>
         /// Each item published to the observable sequence is added to the collection

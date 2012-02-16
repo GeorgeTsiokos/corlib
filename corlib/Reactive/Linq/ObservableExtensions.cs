@@ -56,8 +56,8 @@ namespace CorLib.Reactive.Linq {
             });
         }
 
-        public static IObservable<Tuple<A, B>> CombineLatest<A, B> (this IObservable<A> sequeceA, IObservable<B> sequenceB) {
-            return sequeceA.CombineLatest<A, B, Tuple<A, B>> (sequenceB, (a, b) => new Tuple<A, B> (a, b));
+        public static IObservable<Tuple<A, B>> CombineLatest<A, B> (this IObservable<A> sequneceA, IObservable<B> sequenceB) {
+            return sequneceA.CombineLatest<A, B, Tuple<A, B>> (sequenceB, (a, b) => new Tuple<A, B> (a, b));
         }
 
         /// <summary>Returns a filtered sequence where each value T is not equal to null</summary>
