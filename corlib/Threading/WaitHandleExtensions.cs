@@ -2,8 +2,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using CorLib.Internal;
 
 namespace CorLib.Threading {
 
@@ -28,10 +26,10 @@ namespace CorLib.Threading {
                                         if (timedOut)
                                             observer.OnError (new TimeoutException ());
                                         else {
+                                            observer.OnNext (Unit.Default);
+
                                             if (executeOnlyOnce)
                                                 observer.OnCompleted ();
-                                            else
-                                                observer.OnNext (Unit.Default);
                                         }
                                     },
                                     null,

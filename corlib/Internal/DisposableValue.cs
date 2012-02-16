@@ -12,6 +12,10 @@ namespace CorLib.Internal {
             _dispose = dispose;
         }
 
+        public DisposableValue (T value, IDisposable dispose)
+            : this (value, () => dispose.TryDispose ()) {
+        }
+
         public T Value {
             get { return _value; }
         }

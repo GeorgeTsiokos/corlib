@@ -6,8 +6,10 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CorLib.Threading {
+
     [TestClass]
     public class WaitHandleExtensionsTest {
+
         [TestMethod]
         public void ToObservableTest () {
             int count = 1;
