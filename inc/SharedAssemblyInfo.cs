@@ -6,17 +6,16 @@
 [assembly: AssemblyCompany ("This open-source library is not affiliated with Microsoft Corporation")]
 [assembly: AssemblyCulture ("")]
 [assembly: AssemblyVersion ("0.0.2.0")]
-[assembly: AssemblyFileVersion ("0.0.2.0")]
+[assembly: AssemblyFileVersion ("0.0.2.6")]
+//TODO: nuget should use file version
 
 #if DEBUG
 [assembly: AssemblyConfiguration("DEBUG")]
-#elif RELEASE
-[assembly: AssemblyConfiguration("RELEASE")]
 #else
-[assembly: AssemblyConfiguration("UNKNOWN")]
+[assembly: AssemblyConfiguration("RELEASE")]
 #endif
 
-#if RELEASE
-[assembly: AssemblyKeyFile ("corlib.snk")]
+#if !DEBUG
+[assembly: AssemblyKeyFile (@"..\corlib.snk")]
 //[assembly: AssemblyDelaySignAttribute (true)]
 #endif

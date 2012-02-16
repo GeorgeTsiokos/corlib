@@ -4,6 +4,8 @@ using System.Threading;
 
 namespace CorLib.Internal.Collections.Generic {
 
+    // Add a finializer to see if the _count != 0 and throw
+    
     internal sealed class RefCountDisposable<T> : IDisposable<T> {
         IProducerConsumerCollection<IDisposable<T>> _collection;
         T _value;

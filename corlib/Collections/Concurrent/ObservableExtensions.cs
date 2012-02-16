@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.Contracts;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using CorLib.Threading;
-using System.Diagnostics.Contracts;
 
 namespace CorLib.Collections.Concurrent {
 
     public static class ObservableExtensions {
 
         public static IDisposable Subscribe<TKey, TValue> (this IObservable<TValue> sequence, ConcurrentDictionary<TKey, TValue> dictionary, Func<TValue, TKey> keySelector) {
-            return sequence.Subscribe<TValue, TKey, TValue> (dictionary, keySelector, (key, value) => value);
+            return Subscribe<TValue, TKey, TValue> (sequence, dictionary, keySelector, (key, value) => value);
         }
 
         public static IDisposable Subscribe<T, TKey, TValue> (this IObservable<T> sequence, ConcurrentDictionary<TKey, TValue> dictionary, Func<T, TKey> keySelector, Func<TKey, T, TValue> valueSelector, Func<T, bool> addOrUpdate = null, Func<T, bool> remove = null, Func<TKey, TValue, TValue> updateValueFactory = null) {
@@ -20,8 +20,6 @@ namespace CorLib.Collections.Concurrent {
             Contract.Requires (dictionary != null, "dictionary is null.");
             Contract.Requires (keySelector != null, "keySelector is null.");
             Contract.Requires (valueSelector != null, "valueSelector is null.");
-            Contract.Requires (null == remove ||
-                              (null != addOrUpdate && null != remove), "addOrUpdate is required when remove is defined");
 
             if (null == updateValueFactory)
                 updateValueFactory = (key, value) => value;
@@ -53,18 +51,15 @@ namespace CorLib.Collections.Concurrent {
                     });
         }
 
-        //static TValue DefaultValueSelector<T, TKey, TValue> (TKey key, T value) {
-
-        //}
-
         /// <summary>
         /// Each item published to the observable sequence is added to the collection
         /// </summary>
         /// <param name="sequence">input observable sequence</param>
         /// <param name="collection">collection to add the items to</param>
-        /// <returns>a disposable to unsubscribe the collection from the sequence</returns>
+        /// <returns>a <see cref="SingleAssignmentDisposable"/> to check if a subscription has ended (due to a false TryAdd) 
+        /// or to unsubscribe the collection from the sequence</returns>
         /// <remarks>if the collection returns false during TryAdd the collection unsubscribes from the sequence</remarks>
-        public static IDisposable Subscribe<T> (this IObservable<T> sequence, IProducerConsumerCollection<T> collection) {
+        public static SingleAssignmentDisposable Subscribe<T> (this IObservable<T> sequence, IProducerConsumerCollection<T> collection) {
             var subscription = new SingleAssignmentDisposable ();
             subscription.Disposable = sequence.Subscribe (value => {
                 if (!collection.TryAdd (value))
