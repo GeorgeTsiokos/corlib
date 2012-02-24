@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -13,6 +14,42 @@ using CorLib.Collections.Generic;
 namespace CorLib.Reactive.Linq {
 
     public static class ObservableExtensions {
+
+        /// <summary>
+        /// Takes the first value (and ignores the rest), or, returns the default value for each timespan
+        /// </summary>
+        /// <param name="sequence">sequence to throttle</param>
+        /// <param name="timespan">duration of the throttle period</param>
+        /// <param name="defaultValue">value to return within the timespan when no values are returned</param>
+        /// <param name="scheduler">scheduler for windowing and taking from the sequence</param>
+        /// <returns>a throttled observable sequence</returns>
+        /// <remarks>Unlike <see cref="System.Reactive.Observable.Throttle"/> this operator pushes the
+        /// 1st value within the timespan, and returns a default value if the <paramref name="sequence"/>
+        /// doesn't produce a value within <paramref name="timespan"/>.
+        /// </remarks>
+        public static IObservable<T> Throttle2<T> (this IObservable<T> sequence, TimeSpan timespan, T defaultValue = default(T), IScheduler scheduler = null) {
+            var windowDisposable = new MultipleAssignmentDisposable ();
+
+            return Observable.Create<T> (observer => {
+                var windowedSequence = null == scheduler ?
+                                    sequence.Window (timespan) :
+                                    sequence.Window (timespan, scheduler);
+
+                var windowSubscription = windowedSequence.Subscribe (window => {
+                    var takeFirstResult = null == scheduler ?
+                                            window.Take (1) :
+                                            window.Take (1, scheduler);
+                    var useDefaultIfEmpty =
+                        takeFirstResult.DefaultIfEmpty (defaultValue);
+                    windowDisposable.Disposable =
+                        useDefaultIfEmpty.Subscribe (observer.OnNext);
+                },
+                observer.OnError,
+                observer.OnCompleted);
+
+                return new CompositeDisposable (windowSubscription, windowDisposable);
+            });
+        }
 
         public static IEnumerable<T> ToEnumerable<T> (this IObservable<T> sequence, int? boundedCapacity = null, TimeSpan? timeout = null, CancellationToken cancellationToken = default(CancellationToken)) {
             return ToEnumerable<T, ConcurrentQueue<Notification<T>>> (sequence, boundedCapacity, timeout, cancellationToken);
