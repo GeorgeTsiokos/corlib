@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace CorLib.Threading {
+namespace Corlib.Threading {
 
     /// <summary>
     /// A simple atomic gate

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections;
 
-namespace CorLib.Collections.Generic {
+namespace Corlib.Collections.Generic {
 
     internal sealed class AnonymousEnumerator<T> : IEnumerator<T> {
 

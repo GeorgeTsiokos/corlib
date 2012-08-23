@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CorLib.Threading {
+namespace Corlib.Threading {
 
     [TestClass]
     public class CancellationTokenExtensionsTest {

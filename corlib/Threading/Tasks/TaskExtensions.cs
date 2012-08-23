@@ -4,7 +4,7 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CorLib.Threading.Tasks {
+namespace Corlib.Threading.Tasks {
 
     public static class TaskExtensions {
 

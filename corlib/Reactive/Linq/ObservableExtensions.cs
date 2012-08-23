@@ -8,10 +8,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using CorLib.Collections.Concurrent;
-using CorLib.Collections.Generic;
+using Corlib.Collections.Concurrent;
+using Corlib.Collections.Generic;
 
-namespace CorLib.Reactive.Linq {
+namespace Corlib.Reactive.Linq {
 
     public static class ObservableExtensions {
 

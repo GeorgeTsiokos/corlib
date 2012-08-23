@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-namespace CorLib.Diagnostics {
+namespace Corlib.Diagnostics {
 
     public sealed class TraceSourceFactory : IDisposable {
 

@@ -2,7 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
-namespace CorLib.Threading.Tasks {
+namespace Corlib.Threading.Tasks {
 
     /// <summary>
     /// Extension methods for <see cref="IAsyncResult"/>

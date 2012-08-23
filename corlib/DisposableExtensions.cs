@@ -1,11 +1,11 @@
 ﻿using System;
-using CorLib.Diagnostics;
+using Corlib.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Diagnostics.Contracts;
 
-namespace CorLib {
+namespace Corlib {
 
     /// <summary>
     /// IDisposable extension methods

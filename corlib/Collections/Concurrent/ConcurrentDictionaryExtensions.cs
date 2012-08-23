@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics.Contracts;
 
-namespace CorLib.Collections.Concurrent {
+namespace Corlib.Collections.Concurrent {
 
     public static class ConcurrentDictionaryExtensions {
 

@@ -5,7 +5,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading;
 
-namespace CorLib.Reactive.Concurrency {
+namespace Corlib.Reactive.Concurrency {
 
     public static class SchedulerExtensions {
 

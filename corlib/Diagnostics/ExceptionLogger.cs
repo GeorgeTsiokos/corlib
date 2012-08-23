@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace CorLib.Diagnostics {
+namespace Corlib.Diagnostics {
 
     public static class ExceptionLogger {
 

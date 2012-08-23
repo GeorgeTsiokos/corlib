@@ -1,6 +1,6 @@
-﻿using CorLib.Threading;
+﻿using Corlib.Threading;
 
-namespace CorLib.Threading {
+namespace Corlib.Threading {
 
     public sealed class AtomicInfo<T> {
 

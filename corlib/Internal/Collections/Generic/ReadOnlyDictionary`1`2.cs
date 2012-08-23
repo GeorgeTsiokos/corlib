@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CorLib.Internal.Collections.Generic {
+namespace Corlib.Internal.Collections.Generic {
 
     internal class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue> {
 

@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using CorLib.Threading;
+using Corlib.Threading;
 
-namespace CorLib.Reactive.Concurrency {
+namespace Corlib.Reactive.Concurrency {
 
     /// <summary>
     /// A scheduler where work items are queued and must be started for items to execute

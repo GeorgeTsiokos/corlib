@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace CorLib.Internal.Collections.Generic {
+namespace Corlib.Internal.Collections.Generic {
 
     internal sealed class ImmutableDisposable<T> : IDisposable<T> {
         IProducerConsumerCollection<IDisposable<T>> _collection;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace CorLib.Internal.Threading.Tasks {
+namespace Corlib.Internal.Threading.Tasks {
 
     internal static class TaskUtilities {
 

@@ -3,10 +3,10 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
-using CorLib.Diagnostics;
-using CorLib.Threading;
+using Corlib.Diagnostics;
+using Corlib.Threading;
 
-namespace CorLib.Reactive.Concurrency {
+namespace Corlib.Reactive.Concurrency {
 
     /// <summary>
     /// Represents an object that schedules units of work to execute sequentially

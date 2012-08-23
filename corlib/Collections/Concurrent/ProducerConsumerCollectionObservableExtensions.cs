@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using CorLib.Internal.Collections.Generic;
+using Corlib.Internal.Collections.Generic;
 
-namespace CorLib.Collections.Concurrent {
+namespace Corlib.Collections.Concurrent {
 
     public static class ProducerConsumerCollectionObservableExtensions {
         /// <summary>

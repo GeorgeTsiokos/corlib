@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 
-namespace CorLib.Threading {
+namespace Corlib.Threading {
 
     public static class WaitHandleExtensions {
 

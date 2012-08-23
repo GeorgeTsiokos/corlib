@@ -4,7 +4,7 @@ using System.Linq;
 using System.Diagnostics.Contracts;
 using System;
 
-namespace CorLib.Linq {
+namespace Corlib.Linq {
 
     public static class EnumerableExtensions {
 

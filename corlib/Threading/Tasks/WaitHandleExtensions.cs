@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CorLib.Internal;
+using Corlib.Internal;
 
-namespace CorLib.Threading.Tasks {
+namespace Corlib.Threading.Tasks {
 
     public static class WaitHandleExtensions {
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CorLib.Reactive.Concurrency {
+namespace Corlib.Reactive.Concurrency {
 
     [Flags]
     public enum CancellationCheckMode {

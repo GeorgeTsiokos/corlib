@@ -1,5 +1,5 @@
 
-namespace CorLib.Linq {
+namespace Corlib.Linq {
 
     /// <summary>
     /// Identify in which set(s) the object lives

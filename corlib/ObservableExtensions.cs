@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Reactive;
-using CorLib.Threading;
+using Corlib.Threading;
 
-namespace CorLib {
+namespace Corlib {
 
     public static class ObservableExtensions {
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CorLib.Internal {
+namespace Corlib.Internal {
 
     internal sealed class DisposableValue<T> : IDisposable<T> {
 

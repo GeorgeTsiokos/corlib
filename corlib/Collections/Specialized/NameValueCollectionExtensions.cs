@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Diagnostics.Contracts;
 
-namespace CorLib.Collections.Specialized {
+namespace Corlib.Collections.Specialized {
 
     public static class NameValueCollectionExtensions {
 

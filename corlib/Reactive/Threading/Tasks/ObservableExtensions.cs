@@ -4,7 +4,7 @@ using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CorLib.Reactive.Threading.Tasks {
+namespace Corlib.Reactive.Threading.Tasks {
 
     /// <summary>
     /// Provides a set of static methods for converting IObservables to Tasks.

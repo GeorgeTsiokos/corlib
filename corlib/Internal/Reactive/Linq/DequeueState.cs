@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using CorLib.Collections.Concurrent;
+using Corlib.Collections.Concurrent;
 
-namespace CorLib.Internal.Reactive.Linq {
+namespace Corlib.Internal.Reactive.Linq {
 
     internal sealed class DequeueState {
 

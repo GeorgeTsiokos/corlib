@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace CorLib.Threading {
+namespace Corlib.Threading {
 
     /// <summary>
     /// A UInt64 that can be accessed from multiple threads concurrently <see cref="AtomicUInt64.Create()"/>

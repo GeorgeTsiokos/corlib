@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CorLib.Threading {
+namespace Corlib.Threading {
 
     [TestClass]
     public class GateTest {

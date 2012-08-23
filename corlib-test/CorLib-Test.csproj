@@ -9,7 +9,7 @@
     <ProjectGuid>{94FD400B-6D94-4313-A70F-6B1376AA1129}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CorLib</RootNamespace>
+    <RootNamespace>Corlib</RootNamespace>
     <AssemblyName>corlib-test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,9 +67,9 @@
     <Compile Include="Threading\WaitHandleExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\corlib\CorLib.csproj">
+    <ProjectReference Include="..\corlib\Corlib.csproj">
       <Project>{C428CC8B-07FD-450A-8341-48A41F9798CB}</Project>
-      <Name>CorLib</Name>
+      <Name>Corlib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using CorLib.Internal.Collections.Generic;
+using Corlib.Internal.Collections.Generic;
 
-namespace CorLib.Collections.Generic {
+namespace Corlib.Collections.Generic {
 
     public static class DictionaryExtensions {
 

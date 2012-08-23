@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Diagnostics.Contracts;
 
-namespace CorLib {
+namespace Corlib {
     /// <summary>
     /// Nullable{TimeSpan} extension methods
     /// </summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace CorLib.Diagnostics {
+namespace Corlib.Diagnostics {
 
     public static class TraceSourceExtensions {
 

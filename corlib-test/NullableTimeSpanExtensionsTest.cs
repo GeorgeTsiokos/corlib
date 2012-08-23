@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CorLib;
+using Corlib;
 
-namespace CorLib {
+namespace Corlib {
     [TestClass]
     public class NullableTimeSpanExtensionsTest {
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CorLib.Collections.Generic {
+namespace Corlib.Collections.Generic {
 
     public sealed class AnonymousEnumerable<T> : IEnumerable<T> {
 

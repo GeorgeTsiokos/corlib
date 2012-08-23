@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace CorLib.Internal.Collections.Generic {
+namespace Corlib.Internal.Collections.Generic {
 
     // Add a finializer to see if the _count != 0 and throw
     

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CorLib {
+namespace Corlib {
     /// <summary>
     /// Encapsulates a value that can be disposed of (signaled)
     /// </summary>

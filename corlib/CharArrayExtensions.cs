@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace CorLib {
+namespace Corlib {
     /// <summary>
     /// System.Char[] extension methods 
     /// </summary>

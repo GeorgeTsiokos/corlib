@@ -4,7 +4,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-namespace CorLib.Collections.Concurrent {
+namespace Corlib.Collections.Concurrent {
 
     /// <summary>
     /// Options for converting a <see cref="ProducerConsumerCollection`1"/> to an observable sequence

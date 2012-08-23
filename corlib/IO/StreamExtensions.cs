@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using CorLib.Collections.Concurrent;
+using Corlib.Collections.Concurrent;
 
-namespace CorLib.IO {
+namespace Corlib.IO {
 
     public static class StreamExtensions {
 

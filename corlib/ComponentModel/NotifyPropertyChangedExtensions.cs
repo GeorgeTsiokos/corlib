@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Diagnostics.Contracts;
 
-namespace CorLib.ComponentModel {
+namespace Corlib.ComponentModel {
 
     public static class NotifyPropertyChangedExtensions {
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CorLib.Collections.Generic {
+namespace Corlib.Collections.Generic {
 
     /// <summary>
     /// A collection where <see cref="WeakReference"/>s are held for each item
