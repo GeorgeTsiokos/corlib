@@ -146,6 +146,7 @@
     <Compile Include="Collections\Concurrent\ProducerConsumerCollectionObservableOptions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
     <Compile Include="Collections\Generic\AnonymousEnumerable`1.cs" />
+    <Compile Include="IExclusive`1.cs" />
     <Compile Include="Internal\Collections\Generic\ReadOnlyDictionary`1`2.cs" />
     <Compile Include="Collections\Specialized\NameValueCollectionExtensions.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedExtensions.cs" />

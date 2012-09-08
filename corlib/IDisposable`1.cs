@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Corlib {
     /// <summary>
-    /// Encapsulates a value that can be disposed of (signaled)
+    /// Encapsulates a read-only value
     /// </summary>
     /// <remarks>
     /// Enables consumers to signal when they are done with the value 
